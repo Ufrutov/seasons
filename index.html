@@ -11,6 +11,17 @@
 
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 		<style type="text/css">
+			:root {
+				--color-primary: #7289da;
+				--color-secondary: #fbc976;
+			}
+			#playlist::-webkit-scrollbar {
+				width: 5px; }
+			#playlist::-webkit-scrollbar-track {
+				background-color: #212429; }
+			#playlist::-webkit-scrollbar-thumb {
+				background-color: #47516a; }
+			video { outline: none; }
 			html, body {
 				margin: 0;
 				padding: 0;
@@ -31,27 +42,63 @@
 			#play {
 				width: 48px;
 				height: 48px;
-				background-color: #7289da;
+				background-color: var(--color-primary);
 				cursor: pointer;
 				border-radius: 16px;
 				z-index: 2; }
 			#next {
 				width: 68px;
 				height: 48px;
-				background-color: #fbc976;
+				background-color: var(--color-secondary);
 				cursor: pointer;
 				border-radius: 16px;
 				margin-left: -40px;
 				z-index: 1; }
+			#playlist {
+				max-height: calc( 100% - 80px );
+				overflow-y: auto; }
 			.player {
 				background-color: #40444b; }
+			.tvs .season {
+				display: none; }
+			.tvs.active .season {
+				display: block; }
+			.tvs--name {
+				background-color: #21242b;
+				font-weight: 700;
+				cursor: pointer; }
+			.tvs--name .small {
+				font-weight: normal; }
+			.epizode {
+				width: 32px;
+				height: 32px;
+				font-size: 16px;
+				line-height: 33px;
+				font-weight: 700;
+				text-align: center;
+				background-color: var(--color-primary);
+				border-radius: 5px;
+				margin-right: 8px;
+				margin-bottom: 8px;
+				cursor: pointer; }
+			.epizode.active {
+				background-color: var(--color-secondary);
+				color: #2f3136; }
+			.season {
+				cursor: pointer;
+				background-color: #21242b;
+				border-radius: 5px; }
+			.season .season--series {
+				display: none !important; }
+			.season.active .season--series {
+				display: flex !important; }
 		</style>
 </head>
 
 <body>
 	<main class="d-flex align-items-stretch">
 		<aside>
-			<div class="player d-flex align-items-center p-2">
+			<div class="player d-flex align-items-center px-2 py-3">
 				<div class="player--actions d-flex pr-3">
 					<div id="play"></div>
 					<div id="next"></div>
@@ -61,9 +108,10 @@
 					<div id="caption" class="text-truncate small">Бесплатно, без регистрации</div>
 				</div>
 			</div>
+			<div id="playlist"></div>
 		</aside>
 		<section class="flex-grow-1">
-			<video id="video"></video>
+			<video id="video" controls autoplay="false"></video>
 		</section>
 	</main>
 </body>
@@ -71,8 +119,118 @@
 <script type="text/javascript" src="data.js"></script>
 <script type="text/javascript">
 	(function() {
-		console.log('[data]', data);
+		const playlist = document.getElementById('playlist');
+		const title = document.getElementById('title');
+		const caption = document.getElementById('caption');
+		const video = document.getElementById('video');
+
+		let items = [];
+
+		data.forEach((s, i) => {
+			if( items.findIndex(x => x.id === s.id ) === -1 ) {
+				items.push({
+					id: s.id,
+					title: s.name,
+					seasons: []
+				});
+			}
+
+			if( items.findIndex(x => x.id === s.id ) !== -1 ) {
+				const index = items.findIndex(x => x.id === s.id );
+				let tvs = items[index];
+
+				if( tvs.seasons.findIndex(x => x.season === s.season) === -1 ) {
+					tvs.seasons.push({
+						season: s.season,
+						series: []
+					});
+				}
+
+				if( tvs.seasons.findIndex(x => x.season === s.season) !== -1 ) {
+					const sIndex = tvs.seasons.findIndex(x => x.season === s.season);
+					let season = tvs.seasons[sIndex];
+
+					season.series.push(s);
+				}
+			}
+		});
+
+		completePlaylist(items);
 	})();
+
+	function completePlaylist(data) {
+		data.forEach(i => {
+			let tvs = document.createElement('div');
+			tvs.className = 'tvs';
+
+			tvs.onclick = (e) => { clickListener(e, 'tvs', i, tvs) }
+
+			let tvsName = document.createElement('div');
+			tvsName.className = 'tvs--name p-2';
+			tvsName.innerHTML = i.title;
+
+			let tvsCount = document.createElement('div');
+			tvsCount.className = 'tvs--count mt-1 small';
+			tvsCount.innerHTML = i.seasons.length + ' сезонов';
+
+			tvsName.appendChild(tvsCount);
+			tvs.appendChild(tvsName);
+
+			i.seasons.forEach(sn => {
+				let season = document.createElement('div');
+				season.className = 'season m-1 p-2';
+
+				season.onclick = (e) => { clickListener(e, 'season', sn, season) }
+
+				let seasonName = document.createElement('div');
+				seasonName.className = 'season--name small';
+				seasonName.innerHTML = sn.season + ' сезон ('+ sn.series.length +' серий)';
+
+				season.appendChild(seasonName);
+
+				let series = document.createElement('div');
+				series.className = 'season--series d-flex flex-wrap pt-2 mb-n2';
+
+				sn.series.forEach(s => {
+					let sEl = document.createElement('div');
+					sEl.className = 'epizode shadow-sm';
+					sEl.innerHTML = s.epizode;
+
+					sEl.onclick = (e) => { clickListener(e, 'epizode', s, sEl) }
+
+					series.appendChild(sEl);
+				});
+
+				season.appendChild(series);
+				tvs.appendChild(season);
+			});
+
+
+			playlist.appendChild(tvs);
+		});
+
+		function clickListener(e, type, data, el) {
+			e.stopPropagation();
+
+			console.log('[clickListener]', type, data);
+			switch( type ) {
+				case 'tvs':
+					el.classList.toggle('active');
+					break;
+				case 'season':
+					el.classList.toggle('active');
+					break;
+				case 'epizode':
+					el.classList.toggle('active');
+					title.innerHTML = data.name;
+					caption.innerHTML = data.season + ' сезон ' + data.epizode + ' серия';
+
+					video.src = data.src;
+					video.play();
+					break;
+			}
+		}
+	}
 </script>
 
 </html>
