@@ -7,7 +7,7 @@
 		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
 		<meta name="viewport" content="width=device-width"/>
 
-		<title>Your Website Is Ready - InfinityFree</title>
+		<title>Watch your series</title>
 
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 		<style type="text/css">
@@ -55,7 +55,7 @@
 				margin-left: -40px;
 				z-index: 1; }
 			#playlist {
-				max-height: calc( 100% - 80px );
+				max-height: calc( 100% - 64px );
 				overflow-y: auto; }
 			.player {
 				background-color: #40444b; }
@@ -98,7 +98,7 @@
 <body>
 	<main class="d-flex align-items-stretch">
 		<aside>
-			<div class="player d-flex align-items-center px-2 py-3">
+			<div class="player d-flex align-items-center p-2">
 				<div class="player--actions d-flex pr-3">
 					<div id="play"></div>
 					<div id="next"></div>
@@ -141,6 +141,7 @@
 
 				if( tvs.seasons.findIndex(x => x.season === s.season) === -1 ) {
 					tvs.seasons.push({
+						id: s.id,
 						season: s.season,
 						series: []
 					});
@@ -159,9 +160,15 @@
 	})();
 
 	function completePlaylist(data) {
+		const saved = getCookie();
+
 		data.forEach(i => {
 			let tvs = document.createElement('div');
 			tvs.className = 'tvs';
+
+			if( saved && saved.id === i.id ) {
+				tvs.className += ' active';
+			}
 
 			tvs.onclick = (e) => { clickListener(e, 'tvs', i, tvs) }
 
@@ -180,6 +187,10 @@
 				let season = document.createElement('div');
 				season.className = 'season m-1 p-2';
 
+				if( saved && saved.id === sn.id && saved.season === sn.season ) {
+					season.className += ' active';
+				}
+
 				season.onclick = (e) => { clickListener(e, 'season', sn, season) }
 
 				let seasonName = document.createElement('div');
@@ -196,6 +207,10 @@
 					sEl.className = 'epizode shadow-sm';
 					sEl.innerHTML = s.epizode;
 
+					if( saved && saved.id === s.id && saved.season === s.season && saved.epizode === s.epizode ) {
+						sEl.className += ' active';
+					}
+
 					sEl.onclick = (e) => { clickListener(e, 'epizode', s, sEl) }
 
 					series.appendChild(sEl);
@@ -209,26 +224,70 @@
 			playlist.appendChild(tvs);
 		});
 
-		function clickListener(e, type, data, el) {
-			e.stopPropagation();
+		if( saved ) {
+			title.innerHTML = saved.name;
+			caption.innerHTML = saved.season + ' сезон ' + saved.epizode + ' серия';
 
-			console.log('[clickListener]', type, data);
-			switch( type ) {
-				case 'tvs':
-					el.classList.toggle('active');
-					break;
-				case 'season':
-					el.classList.toggle('active');
-					break;
-				case 'epizode':
-					el.classList.toggle('active');
+			video.src = saved.src;
+		}
+	}
+
+	function clickListener(e, type, data, el) {
+		e.stopPropagation();
+
+		console.log('[clickListener]', type, data);
+		switch( type ) {
+			case 'tvs':
+				if( el.classList.contains('active') ) {
+					el.classList.remove('active');
+				} else {
+					Array.from(document.querySelectorAll('.tvs')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+				}
+				break;
+			case 'season':
+				if( el.classList.contains('active') ) {
+					el.classList.remove('active');
+				} else {
+					Array.from(document.querySelectorAll('.season')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+				}
+				break;
+			case 'epizode':
+				if( !el.classList.contains('active') ) {
+					Array.from(document.querySelectorAll('.epizode')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+
+					setCookie(data);
+
 					title.innerHTML = data.name;
 					caption.innerHTML = data.season + ' сезон ' + data.epizode + ' серия';
 
 					video.src = data.src;
 					video.play();
-					break;
+				}
+				break;
+		}
+	}
+
+	function getCookie() {
+		try {
+			const epizode = window.localStorage.getItem('epizode');
+			if( epizode !== null ) {
+				return JSON.parse(epizode);
+			} else {
+				return false;
 			}
+		} catch(e) {
+			console.error('[E][setCookie] Error on localStorage.getItem: '+e.name+' : '+e.message);
+		}
+	}
+
+	function setCookie(data) {
+		try {
+			window.localStorage.setItem('epizode', JSON.stringify(data));
+		} catch(e) {
+			console.error('[E][setCookie] Error on localStorage.setItem: '+e.name+' : '+e.message);
 		}
 	}
 </script>
