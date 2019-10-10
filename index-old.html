@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Seasonvar</title>
+
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="manifest" href="pwa-manifest.json">
+
+	<style type="text/css">
+		html,
+		body {
+			padding: 0;
+			margin: 0; }
+
+		html {
+			height: 100%; }
+
+		body {
+			height: inherit;
+			position: relative;
+			font-family: Helvetica Neue, Helvetica, Arial, sans-serif; }
+
+		.page-wrapper {
+			position: relative;
+			width: 100%;
+			height: inherit;
+			display: flex; }
+
+		.aside-menu {
+			flex: 0 0 20%;
+			background-color: #39414e;
+			color: #e8e8e8; }
+
+		.aside-content {
+			flex-grow: 1;
+			font-size: 0; }
+
+		.video-container {
+			position: relative;
+			height: 100%; }
+
+		#video-el {
+			width: 100%;
+			height: 100%; }
+
+		.menu-list {
+			position: relative;
+			max-height: calc(100% - 70px);
+			overflow-y: auto; }
+
+		.menu-item,
+		.menu-brand-item {
+			padding: 8px 8px 6px;
+			border-bottom: 1px solid #585858;
+			cursor: pointer;
+			position: relative; }
+
+		.menu-item {
+			padding-left: 14px;
+			background-color: #242931; }
+
+		.menu-item.hide {
+			display: none; }
+
+		.menu-brand-item {
+			background-color: #39414e; }
+
+		.mi-caption {
+			margin-top: 0;
+			margin-bottom: 3px;
+			font-weight: bold;
+			font-size: 0.8rem; }
+
+		.mi-caption-small {
+			font-size: 0.6rem;
+			color: #828282; }
+
+		.mi-caption-small.right {
+			float: right; }
+
+		.mi-sub-caption {
+			margin: 1px 0;
+			font-size: 0.65rem;
+			color: #828282; }
+
+		.menu-item.active {
+			background-color: #59d4db; }
+
+		.menu-item.active * {
+			color: #ffffff; }
+
+		.menu-toggle {
+			width: 24px;
+			height: 24px;
+			position: absolute;
+			right: 5px;
+			top: 50%;
+			margin-top: -12px;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQyIDQyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0MiA0MjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjE2cHgiPgo8cG9seWdvbiBwb2ludHM9IjQyLDE5IDIzLDE5IDIzLDAgMTksMCAxOSwxOSAwLDE5IDAsMjMgMTksMjMgMTksNDIgMjMsNDIgMjMsMjMgNDIsMjMgIiBmaWxsPSIjZThlOGU4Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
+
+			-webkit-transition: all 0.3s ease-in;
+			-moz-transition: all 0.3s ease-in;
+			-ms-transition: all 0.3s ease-in;
+			-o-transition: all 0.3s ease-in;
+			transition: all 0.3s ease-in;
+			opacity: 0.5; }
+
+		.menu-brand-item.open .menu-toggle {
+			-webkit-transform: rotate(45deg);
+			-moz-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			-o-transform: rotate(45deg);
+			transform: rotate(45deg);
+			opacity: 1; }
+
+		.menu-toggle:hover,
+		.menu-toggle:active,
+		.menu-toggle:focus {
+			opacity: 1; }
+
+		.t-strong {
+			font-weight: bold; }
+
+		.select-el {
+			border: none;
+			width: 100%;
+			padding: 8px 10px 8px 5px;
+			outline: none;
+			font-weight: bold;
+			font-size: 0.8rem;
+			cursor: pointer; }
+
+		.m-player {
+			padding: 10px;
+			color: #ffffff;
+			background-color: #59d4db; }
+
+		.m-player-wrap {
+			display: flex;
+			align-items: center; }
+
+		.m-player-state {
+			position: relative;
+			padding-right: 45px; }
+
+		.m-player-button {
+			width: 48px;
+			height: 48px;
+			border-radius: 48px;
+			border: 1px solid #ffffff;
+			cursor: pointer; }
+
+		.m-player-button:active,
+		.m-player-button:focus,
+		.m-player-button:hover {
+			background-color: #3ac8d0;
+		}
+
+		.m-player-button.play {
+			background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDM1NyAzNTciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDM1NyAzNTc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0icGxheS1hcnJvdyI+CgkJPHBvbHlnb24gcG9pbnRzPSIzOC4yNSwwIDM4LjI1LDM1NyAzMTguNzUsMTc4LjUgICAiIGZpbGw9IiNGRkZGRkYiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K);
+			background-repeat: no-repeat;
+			background-position: center;
+			background-position-x: 15px; }
+
+		.m-player-button.pause {
+			background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDM1NyAzNTciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDM1NyAzNTc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0icGF1c2UiPgoJCTxwYXRoIGQ9Ik0yNS41LDM1N2gxMDJWMGgtMTAyVjM1N3ogTTIyOS41LDB2MzU3aDEwMlYwSDIyOS41eiIgZmlsbD0iI0ZGRkZGRiIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: 20px; }
+
+		.m-player-button.next {
+			width: 28px;
+			height: 28px;
+			border-radius: 28px;
+			background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDMwNiAzMDYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMwNiAzMDY7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0ic2tpcC1uZXh0Ij4KCQk8cGF0aCBkPSJNMCwzMDZsMjE2Ljc1LTE1M0wwLDBWMzA2eiBNMjU1LDB2MzA2aDUxVjBIMjU1eiIgZmlsbD0iI0ZGRkZGRiIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: 10px;
+			position: absolute;
+			top: 50%;
+			right: 8px;
+			margin-top: -14px; }
+
+		#m-player-caption {
+			font-size: 0.9rem;
+			margin-top: 0;
+			margin-bottom: 5px; }
+
+		#m-player-sub {
+			font-size: 0.75rem;
+			margin: 0; }
+	</style>
+</head>
+<body>
+	<div class="page-wrapper">
+		<div class="aside aside-menu">
+			<div class="m-player">
+				<div class="m-player-wrap">
+					<div class="m-player-state">
+						<div id="m-play" class="m-player-button play"></div>
+						<div id="m-next" class="m-player-button next"></div>
+					</div>
+					<div class="m-player-info">
+						<h2 id="m-player-caption">Смотреть бесплатно</h2>
+						<p id="m-player-sub">Без регистрации и смс</p>
+					</div>
+				</div>
+			</div>
+			<div id="menu-brand" style="display: none;">
+				<select id="select-brand" class="select-el"></select>
+			</div>
+			<div id="menu-el" class="menu-list"></div>
+		</div>
+		<div class="aside aside-content">
+			<div class="video-container">
+				<video id="video-el" autoplay="0" controls="1"></video>
+			</div>
+		</div>
+	</div>
+
+	<!-- Seansons data provide -->
+	<script type="text/javascript" src="season-data.js"></script>
+	<script type="text/javascript">
+		const cookieName = "ux-cookies-seasonvar";
+
+		function uxGetCookie(name) {
+			const cookiestring=RegExp(""+name+"[^;]+").exec(document.cookie);
+			return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+		}
+
+		function uxSetCookie(data, keep) {
+			var exDate = new Date;
+			exDate.setDate(exDate.getDate() + (keep) ? 30 : -1 ); // Save cookie for 30 days
+
+			try {
+				document.cookie = cookieName+"="+data+"; path=/; expires="+exDate.toUTCString();
+			} catch(e) {
+				console.error("[E] Error on document.cookie management.");
+				console.error(e);
+			}
+		}
+
+		function uxClearCookie() {
+			uxSetCookie("", false);
+		}
+
+		function menuHandler(mi, play) {
+			if( mi.classList.contains('active') )
+				return;
+
+			const menu = document.getElementsByClassName("menu-item");
+			const video = document.getElementById("video-el");
+			const caption = document.getElementById("m-player-caption");
+			const sub = document.getElementById("m-player-sub");
+			const data = JSON.parse(mi.dataset.item);
+
+			for (var i = 0; i < menu.length; i++) {
+				if( menu[i].classList.contains("active") )
+					menu[i].classList.remove("active");
+			}
+
+			if( !mi.classList.contains("active") )
+				mi.classList.add("active");
+
+			video.setAttribute("src", mi.dataset.link);
+
+			if( !play )
+				video.pause();
+
+			caption.innerText = data.brand;
+			sub.innerText = "Сезон "+data.season+" серия "+data.number;
+
+			uxSetCookie(mi.dataset.item, true);
+		}
+
+		function menuBrandHandler(mb) {
+			const open = mb.classList.contains("open");
+			const mis = document.querySelectorAll('div.menu-item[data-brand="'+mb.dataset.brand+'"]');
+
+			if( open )
+				mb.classList.remove("open");
+			else
+				mb.classList.add("open");
+
+			for (var i = 0; i < mis.length; i++) {
+				if( mb.dataset.season == mis[i].dataset.season ) {
+					if( !open ) {
+						if( mis[i].classList.contains("hide") )
+							mis[i].classList.remove("hide");
+					} else
+						mis[i].classList.add("hide");
+				}
+			}
+		}
+
+		function completeMenu(list) {
+			const menuEl = document.getElementById("menu-el");
+			const cookie = uxGetCookie(cookieName);
+			var brands = {};
+			var active = null;
+			var activeBrandSeason = null;
+
+			if( cookie.length > 0 ) {
+				active = JSON.parse(cookie);
+			} else {
+				active = { link: "", brand: "", season: -1 };
+			}
+
+			for (var i = 0; i < list.length; i++) {
+				if( Object.keys(brands).indexOf(list[i].brand) == -1 ) {
+					brands[list[i].brand] = [];
+				}
+
+				if( brands[list[i].brand].indexOf(list[i].season) == -1 ) {
+					brands[list[i].brand].push(list[i].season);
+					completeMenuBrandItem(menuEl, list[i], active);
+				}
+
+				completeMenuItem(menuEl, list[i], active);
+			}
+
+			// completeBrands(brands);
+		}
+
+		function completeMenuItem(menu, item, active) {
+			var miClass = "menu-item hide";
+
+			if( active.brand == item.brand && active.season == item.season )
+				miClass = "menu-item";
+
+			const mi = document.createElement("div");
+			mi.setAttribute("class", miClass);
+			mi.setAttribute("data-link", item.link);
+			mi.setAttribute("data-brand", item.brand);
+			mi.setAttribute("data-season", item.season);
+			mi.setAttribute("data-item", JSON.stringify(item));
+
+			const caption = document.createElement("h4");
+			caption.setAttribute("class", "mi-caption");
+			caption.appendChild(document.createTextNode(item.brand));
+
+			const caption2 = document.createElement("span");
+			caption2.setAttribute("class", "mi-caption-small right");
+			caption2.appendChild(document.createTextNode("Сезон "+item.season));
+
+			const title = document.createElement("p");
+			title.setAttribute("class", "mi-sub-caption");
+			title.appendChild(document.createTextNode(item.title));
+
+			mi.appendChild(caption2);
+			mi.appendChild(caption);
+			mi.appendChild(title);
+
+			menu.appendChild(mi);
+
+			mi.addEventListener("click", function(ev) {
+				menuHandler(ev.currentTarget, true);
+			});
+
+			if( item.link == active.link )
+				menuHandler(mi, false);
+		}
+
+		function completeMenuBrandItem(menu, item, active) {
+			const mi = document.createElement("div");
+			mi.setAttribute("class", "menu-brand-item");
+			mi.setAttribute("data-brand", item.brand);
+			mi.setAttribute("data-season", item.season);
+
+			const caption = document.createElement("h4");
+			caption.setAttribute("class", "mi-caption");
+			caption.appendChild(document.createTextNode(item.brand));
+
+			const title = document.createElement("p");
+			title.setAttribute("class", "mi-sub-caption t-strong");
+			title.appendChild(document.createTextNode("Сезон " + item.season));
+
+			const toggle = document.createElement("span");
+			toggle.setAttribute("class", "menu-toggle");
+
+			mi.appendChild(caption);
+			mi.appendChild(title);
+			mi.appendChild(toggle);
+
+			menu.appendChild(mi);
+
+			mi.addEventListener("click", function(ev) {
+				menuBrandHandler(ev.currentTarget);
+			});
+
+			if( active.brand == item.brand && active.season == item.season )
+				menuBrandHandler(mi);
+		}
+
+		function completeBrands(list, callback) {
+			const brandsEl = document.getElementById('select-brand');
+
+			list.sort();
+
+			for (var i = 0; i < list.length; i++) {
+				const option = document.createElement("option");
+				option.appendChild(document.createTextNode(list[i]));
+
+				brandsEl.add(option);
+			}
+
+			if( typeof callback == "function" )
+				callback();
+		}
+
+		function goToNext() {
+			const list = Array.from(document.getElementsByClassName("menu-item"));
+			const active = document.getElementsByClassName("menu-item active");
+
+			if( active.length > 0 ) {
+				const index = list.indexOf(active[0]);
+				if( index != -1 && typeof list[index+1] !== "undefined" )
+					menuHandler(list[index+1], true);
+			}
+		}
+
+		function handleVideo() {
+			const video = document.getElementById("video-el");
+			const status = document.getElementById("m-play");
+			const next = document.getElementById("m-next");
+
+			video.addEventListener("play", togglePlay);
+			video.addEventListener("pause", togglePlay);
+			video.addEventListener("ended", togglePlay);
+
+			status.addEventListener("click", function(ev) {
+				if( video.src.length > 0 ) {
+					if( status.classList.contains("play") )
+						video.play();
+					else
+						video.pause();
+				}
+			});
+
+			next.addEventListener("click", goToNext);
+		}
+
+		function togglePlay(e) {
+			const video = document.getElementById("video-el");
+			const status = document.getElementById("m-play");
+
+			if( !video.paused ) {
+				if( status.classList.contains("play") )
+					status.classList.remove("play");
+				status.classList.add("pause");
+			} else {
+				if( status.classList.contains("pause") )
+					status.classList.remove("pause");
+				status.classList.add("play");
+			}
+
+			switch(e.type) {
+				case "ended":
+					const fullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+					if( fullScreen ) {
+						try {
+							video.webkitExitFullScreen();
+						} catch(e) { console.error(e); }
+					}
+					break;
+			}
+		}
+
+		window.addEventListener("load", function() {
+			if( data.length !== 0 ) {
+				completeMenu(data);
+				handleVideo();
+			} else {
+				console.warn("[W] No data for menu");
+			}
+
+			// Remove webhost ads element
+			try {
+				document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode.remove();
+			} catch(e) {}
+		});
+	</script>
+</body>
+</html>
