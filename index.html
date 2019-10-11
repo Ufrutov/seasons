@@ -209,6 +209,15 @@
 				play.classList.add('ready');
 				play.classList.remove('play');
 			});
+
+			video.addEventListener('ended', e=> {
+				const fullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+				if( fullScreen ) {
+					try {
+						document.exitFullscreen();
+					} catch(e) { console.error(e); }
+				}
+			});
 		}
 	})();
 
@@ -367,7 +376,9 @@
 		setCookie(data);
 
 		title.innerHTML = data.name;
-		caption.innerHTML = data.season + ' сезон ' + data.epizode + ' серия';
+		caption.innerHTML = `${data.season} сезон ${data.epizode} серия`;
+
+		document.title = `${title.innerHTML} (${caption.innerHTML})`;
 
 		if( !video.paused ) {
 			video.pause();
