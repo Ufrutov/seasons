@@ -11,8 +11,13 @@
 
 		<title>Watch your series</title>
 
+		<meta name="theme-color" content="#40444B">
+		<meta name="background-color" content="#40444B">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-		<link rel="manifest" href="pwa-manifest.json">
+
+		<!-- <link rel="manifest" href="pwa-manifest.json"> -->
+		<link rel="manifest" href='data:application/manifest+json,{"short_name":"Seasons","name":"Seasons","icons":[{"src":"http://flexapp.rf.gd/seasons/icon-512.png","type":"image/png","sizes":"512x512"}],"start_url":"http://flexapp.rf.gd/seasons/","display":"standalone","orientation":"landscape","scope":"http://flexapp.rf.gd/seasons/"}'>
+
 		<style type="text/css">
 			:root {
 				--color-primary: #7289da;
@@ -36,7 +41,7 @@
 			main {
 				height: inherit; }
 			aside {
-				width: 20%;
+				max-width: 220px;
 				background-color: #2f3136; }
 			section {
 				background-color: #000000; }
@@ -123,6 +128,8 @@
 				display: none !important; }
 			.season.active .season--series {
 				display: flex !important; }
+			.season--series {
+				width: 200px; }
 		</style>
 </head>
 
@@ -247,7 +254,7 @@
 
 			i.seasons.forEach((sn, isn) => {
 				let season = document.createElement('div');
-				season.className = 'season m-1 p-2';
+				season.className = 'season m-1 py-2 pl-2';
 
 				if( saved && saved.id === sn.id && saved.season === sn.season ) {
 					season.className += ' active';
