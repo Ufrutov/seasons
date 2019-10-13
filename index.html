@@ -25,6 +25,7 @@
 				--color-secondary: #fbc976;
 				--color-secondary-2: #efb14a;
 				--color-text: #c7c7c7;
+				--color-playing: #dc0909;
 			}
 			#playlist::-webkit-scrollbar {
 				width: 5px; }
@@ -99,16 +100,25 @@
 				display: none; }
 			.tvs.active .season {
 				display: block; }
-			.tvs--name {
+			.tvs.playing .tvs--name:after,
+			.season.playing .season--name:after {
+				content: '';
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 4px;
+				margin-left: 5px;
+				background-color: var(--color-playing); }
+			.tvs--head {
 				background-color: #21242b;
 				font-weight: bold;
 				cursor: pointer;
 				border-top: 1px solid #2f3136;
 				color: var(--color-primary); }
-			.tvs--name .small {
+			.tvs--head .small {
 				font-weight: normal;
 				color: var(--color-text); }
-			.tvs.active .tvs--name {
+			.tvs.active .tvs--head {
 				color: var(--color-secondary); }
 			.epizode {
 				width: 32px;
@@ -250,16 +260,20 @@
 
 			tvs.onclick = (e) => { clickListener(e, 'tvs', i, tvs) }
 
+			let tvsHead = document.createElement('div');
+			tvsHead.className = 'tvs--head p-2';
+
 			let tvsName = document.createElement('div');
-			tvsName.className = 'tvs--name p-2';
+			tvsName.className = 'tvs--name';
 			tvsName.innerHTML = i.title;
 
 			let tvsCount = document.createElement('div');
 			tvsCount.className = 'tvs--count mt-1 small';
 			tvsCount.innerHTML = i.seasons.length + ' сезонов';
 
-			tvsName.appendChild(tvsCount);
-			tvs.appendChild(tvsName);
+			tvsHead.appendChild(tvsName);
+			tvsHead.appendChild(tvsCount);
+			tvs.appendChild(tvsHead);
 
 			i.seasons.forEach((sn, isn) => {
 				let season = document.createElement('div');
@@ -391,6 +405,8 @@
 		playing = data;
 		setCookie(data);
 
+		markPlaying(data);
+
 		title.innerHTML = data.name;
 		caption.innerHTML = `${data.season} сезон ${data.epizode} серия`;
 
@@ -405,6 +421,18 @@
 		if( play ) {
 			video.play();
 		}
+	}
+
+	function markPlaying(data) {
+		Array.from(document.querySelectorAll('.tvs')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.querySelectorAll('.season')).forEach(el => { el.classList.remove('playing') });
+
+		const index = data.index.split(':');
+		const tvs = document.querySelectorAll('.tvs')[index[0]];
+		const season = tvs.querySelectorAll('.season')[index[1]];
+
+		tvs.classList.add('playing');
+		season.classList.add('playing');
 	}
 
 	function getCookie() {
