@@ -24,6 +24,7 @@
 				--color-primary-2: #5976dc;
 				--color-secondary: #fbc976;
 				--color-secondary-2: #efb14a;
+				--color-text: #c7c7c7;
 			}
 			#playlist::-webkit-scrollbar {
 				width: 5px; }
@@ -36,7 +37,7 @@
 				margin: 0;
 				padding: 0;
 				height: 100%;
-				color: #c7c7c7;
+				color: var(--color-text);
 				line-height: 1; }
 			main {
 				height: inherit; }
@@ -100,17 +101,21 @@
 				display: block; }
 			.tvs--name {
 				background-color: #21242b;
-				font-weight: 700;
+				font-weight: bold;
 				cursor: pointer;
-				border-top: 1px solid #2f3136; }
+				border-top: 1px solid #2f3136;
+				color: var(--color-primary); }
 			.tvs--name .small {
-				font-weight: normal; }
+				font-weight: normal;
+				color: var(--color-text); }
+			.tvs.active .tvs--name {
+				color: var(--color-secondary); }
 			.epizode {
 				width: 32px;
 				height: 32px;
 				font-size: 16px;
 				line-height: 33px;
-				font-weight: 700;
+				font-weight: bold;
 				text-align: center;
 				background-color: var(--color-primary);
 				border-radius: 5px;
@@ -130,6 +135,9 @@
 				display: flex !important; }
 			.season--series {
 				width: 200px; }
+			.season.active .season--name {
+				font-weight: bold;
+				margin-bottom: .25rem; }
 		</style>
 </head>
 
