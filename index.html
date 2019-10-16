@@ -43,7 +43,7 @@
 			main {
 				height: inherit; }
 			aside {
-				max-width: 220px;
+				width: 220px;
 				background-color: #2f3136; }
 			section {
 				background-color: #000000; }
@@ -92,7 +92,7 @@
 			#next:active {
 				background-color: var(--color-secondary-2); }
 			#playlist {
-				max-height: calc( 100% - 70px );
+				max-height: calc( 100% - 64px );
 				overflow-y: auto; }
 			.player {
 				background-color: #40444b; }
@@ -152,6 +152,7 @@
 			.progress--bar {
 				height: 4px;
 				font-size: 0;
+				max-width: 120px;
 				background-color: #2f3136; }
 			#progress {
 				display: inline-block;
@@ -372,6 +373,8 @@
 				}
 				break;
 			case 'next':
+				updateProgress(0);
+
 				if( playing ) {
 					const tvs = parseInt(playing.index.split(':')[0]);
 					const sn = parseInt(playing.index.split(':')[1]);
@@ -448,14 +451,19 @@
 		season.classList.add('playing');
 	}
 
-	function updateProgress() {
+	function updateProgress(value) {
 		const progress = document.getElementById('progress');
-		const ts = video.currentTime;
-		const duration = video.duration;
 
-		if( typeof duration === 'number' ) {
-			const width = ( 100 * ts ) / duration;
-			progress.style.width = `${width}%`;
+		if( typeof value !== 'undefined' ) {
+			progress.style.width = `${value}%`;
+		} else {
+			const ts = video.currentTime;
+			const duration = video.duration;
+
+			if( typeof duration === 'number' ) {
+				const width = ( 100 * ts ) / duration;
+				progress.style.width = `${width}%`;
+			}
 		}
 	}
 
