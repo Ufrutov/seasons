@@ -96,6 +96,8 @@
 				overflow-y: auto; }
 			.player {
 				background-color: #40444b; }
+			.player--caption {
+				cursor: pointer; }
 			.tvs .season {
 				display: none; }
 			.tvs.active .season {
@@ -262,7 +264,7 @@
 	})();
 
 	function completePlaylist(data) {
-		const saved = getCookie();
+		const saved = getCookie('epizode');
 
 		data.forEach((i, itvs) => {
 			let tvs = document.createElement('div');
@@ -419,7 +421,7 @@
 
 	function playEpizode(data, play) {
 		playing = data;
-		setCookie(data);
+		setCookie('epizode', data);
 
 		markPlaying(data);
 
@@ -436,6 +438,7 @@
 
 		if( play ) {
 			video.play();
+			saveHistory(data);
 		}
 	}
 
@@ -467,11 +470,36 @@
 		}
 	}
 
-	function getCookie() {
+	function getHistory(callback) {
+		const history = getCookie('history');
+		if( history ) {
+			if( typeof callback === 'function' ) {
+				callback(history);
+			}
+		}
+	}
+
+	function saveHistory(epizode) {
+		let history = getCookie('history');
+
+		if( history === false ) {
+			history = [];
+		}
+
+		if( history.length > 99 ) {
+			history.pop();
+		}
+
+		history.unshift(epizode);
+
+		setCookie('history', history);
+	}
+
+	function getCookie(name) {
 		try {
-			const epizode = window.localStorage.getItem('epizode');
-			if( epizode !== null ) {
-				return JSON.parse(epizode);
+			const cookieData = window.localStorage.getItem(name);
+			if( cookieData !== null ) {
+				return JSON.parse(cookieData);
 			} else {
 				return false;
 			}
@@ -480,9 +508,9 @@
 		}
 	}
 
-	function setCookie(data) {
+	function setCookie(field, data) {
 		try {
-			window.localStorage.setItem('epizode', JSON.stringify(data));
+			window.localStorage.setItem(field, JSON.stringify(data));
 		} catch(e) {
 			console.error('[E][setCookie] Error on localStorage.setItem: '+e.name+' : '+e.message);
 		}
