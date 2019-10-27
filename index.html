@@ -24,8 +24,11 @@
 				--color-primary-2: #5976dc;
 				--color-secondary: #fbc976;
 				--color-secondary-2: #efb14a;
+				--color-background: #2f3136;
 				--color-text: #c7c7c7;
 				--color-playing: #dc0909;
+
+				--player-height: 64px;
 			}
 			#playlist::-webkit-scrollbar {
 				width: 5px; }
@@ -44,7 +47,8 @@
 				height: inherit; }
 			aside {
 				width: 220px;
-				background-color: #2f3136; }
+				position: relative;
+				background-color: var(--color-background); }
 			section {
 				background-color: #000000; }
 			#video {
@@ -92,9 +96,21 @@
 			#next:active {
 				background-color: var(--color-secondary-2); }
 			#playlist {
-				max-height: calc( 100% - 64px );
+				max-height: calc( 100% - var(--player-height) );
 				overflow-y: auto; }
+			#history {
+				display: none;
+				position: absolute;
+				overflow-y: auto;
+				height: calc( 100% - var(--player-height) );
+				width: 100%;
+				top: var(--player-height);
+				left: 0;
+				background-color: var(--color-background); }
+			#history.active {
+				display: block; }
 			.player {
+				overflow: hidden;
 				background-color: #40444b; }
 			.player--caption {
 				cursor: pointer; }
@@ -113,14 +129,15 @@
 				background-color: var(--color-playing); }
 			.tvs--head {
 				background-color: #21242b;
-				font-weight: bold;
 				cursor: pointer;
-				border-top: 1px solid #2f3136;
+				border-top: 1px solid var(--color-background); }
+			.tvs--name {
+				font-weight: bold;
 				color: var(--color-primary); }
 			.tvs--head .small {
 				font-weight: normal;
 				color: var(--color-text); }
-			.tvs.active .tvs--head {
+			.tvs.active .tvs--name {
 				color: var(--color-secondary); }
 			.epizode {
 				width: 32px;
@@ -137,7 +154,7 @@
 				cursor: pointer; }
 			.epizode.active {
 				background-color: var(--color-secondary);
-				color: #2f3136; }
+				color: var(--color-background); }
 			.season {
 				cursor: pointer;
 				background-color: #21242b;
@@ -155,7 +172,7 @@
 				height: 4px;
 				font-size: 0;
 				max-width: 120px;
-				background-color: #2f3136; }
+				background-color: var(--color-background); }
 			#progress {
 				display: inline-block;
 				height: inherit;
@@ -171,13 +188,14 @@
 					<div id="play" class="ready"></div>
 					<div id="next" class="next"></div>
 				</div>
-				<div class="player--caption flex-grow-1">
+				<div id="info" class="player--caption flex-grow-1">
 					<div id="title" class="text-truncate font-weight-bolder mb-1">Смотреть бесплатно</div>
 					<div id="caption" class="text-truncate small mb-1">Бесплатно, без регистрации</div>
 					<div class="progress--bar"><div id="progress"></div></div>
 				</div>
 			</div>
 			<div id="playlist"></div>
+			<div id="history"></div>
 		</aside>
 		<section class="flex-grow-1">
 			<video id="video" controls autoplay="false"></video>
@@ -194,9 +212,11 @@
 		const playlist = document.getElementById('playlist');
 		const title = document.getElementById('title');
 		const caption = document.getElementById('caption');
+		const info = document.getElementById('info');
 		const video = document.getElementById('video');
 		const play = document.getElementById('play');
 		const next = document.getElementById('next');
+		const history = document.getElementById('history');
 
 		data.forEach((s, i) => {
 			if( items.findIndex(x => x.id === s.id ) === -1 ) {
@@ -235,6 +255,9 @@
 		});
 		next.addEventListener('click', e => {
 			clickListener(e, 'next', null, e.currentTarget)
+		});
+		info.addEventListener('click', e => {
+			clickListener(e, 'toggleHistory', null, e.currentTarget)
 		});
 
 		if( video ) {
@@ -402,19 +425,26 @@
 						const next = items[i[0]].seasons[i[1]].series[i[2]];
 
 						if( next ) {
-							Array.from(document.querySelectorAll('.tvs')).forEach(el => { el.classList.remove('active') });
-							Array.from(document.querySelectorAll('.season')).forEach(el => { el.classList.remove('active') });
-							Array.from(document.querySelectorAll('.epizode')).forEach(el => { el.classList.remove('active') });
+							Array.from(document.getElementsByClassName('tvs active')).forEach(el => { el.classList.remove('active') });
+							Array.from(document.getElementsByClassName('season active')).forEach(el => { el.classList.remove('active') });
+							Array.from(document.getElementsByClassName('epizode active')).forEach(el => { el.classList.remove('active') });
 
-							const tvs = document.querySelectorAll('.tvs')[i[0]];
+							const tvs = document.getElementsByClassName('tvs')[i[0]];
 							tvs.classList.add('active');
-							tvs.querySelectorAll('.season')[i[1]].classList.add('active');
-							tvs.querySelectorAll('.season')[i[1]].querySelectorAll('.epizode')[i[2]].classList.add('active');
+							tvs.getElementsByClassName('season')[i[1]].classList.add('active');
+							tvs.getElementsByClassName('season')[i[1]].getElementsByClassName('epizode')[i[2]].classList.add('active');
 
 							playEpizode(next, true);
 						}
 					}
 				}
+				break;
+			case 'toggleHistory':
+				toggleHistoryList();
+				break;
+			case 'playFromHistory':
+				playEpizode(data, true);
+				toggleHistoryList(true);
 				break;
 		}
 	}
@@ -443,15 +473,22 @@
 	}
 
 	function markPlaying(data) {
-		Array.from(document.querySelectorAll('.tvs')).forEach(el => { el.classList.remove('playing') });
-		Array.from(document.querySelectorAll('.season')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.getElementsByClassName('tvs playing')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.getElementsByClassName('tvs active')).forEach(el => { el.classList.remove('active') });
+		Array.from(document.getElementsByClassName('season playing')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.getElementsByClassName('season active')).forEach(el => { el.classList.remove('active') });
+		Array.from(document.getElementsByClassName('epizode active')).forEach(el => { el.classList.remove('active') });
 
 		const index = data.index.split(':');
 		const tvs = document.querySelectorAll('.tvs')[index[0]];
 		const season = tvs.querySelectorAll('.season')[index[1]];
+		const epizode = season.querySelectorAll('.epizode')[index[2]];
 
 		tvs.classList.add('playing');
+		tvs.classList.add('active');
 		season.classList.add('playing');
+		season.classList.add('active');
+		epizode.classList.add('active');
 	}
 
 	function updateProgress(value) {
@@ -467,6 +504,38 @@
 				const width = ( 100 * ts ) / duration;
 				progress.style.width = `${width}%`;
 			}
+		}
+	}
+
+	function toggleHistoryList(hide = false) {
+		const history = document.getElementById('history');
+
+		if( history.classList.contains('active') || hide ) {
+			history.classList.remove('active');
+			history.innerHTML = '';
+		} else {
+			getHistory(data => {
+				data.forEach(h => {
+					let epizode = document.createElement('div');
+					epizode.className = 'season m-1 py-2 pl-2';
+
+					epizode.onclick = (e) => { clickListener(e, 'playFromHistory', h) }
+
+					let seasonName = document.createElement('div');
+					seasonName.className = 'tvs--name mt-n1';
+					seasonName.innerHTML = h.name;
+
+					let description = document.createElement('div');
+					description.className = 'tvs--count mt-1 small';
+					description.innerHTML = `${h.season} сезон ${h.epizode} серия`;
+
+					epizode.appendChild(seasonName);
+					epizode.appendChild(description);
+
+					history.appendChild(epizode);
+				});
+				history.classList.add('active');
+			});
 		}
 	}
 
