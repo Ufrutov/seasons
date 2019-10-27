@@ -475,6 +475,8 @@
 		if( history ) {
 			if( typeof callback === 'function' ) {
 				callback(history);
+			} else {
+				return history;
 			}
 		}
 	}
