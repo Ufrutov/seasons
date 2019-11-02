@@ -3,22 +3,22 @@
 	"name": "Seasons",
 	"icons": [
 		{
-			"src": "/seasons/icon-192.png",
+			"src": "https://ufrutov.github.io/seasons/icon-192.png",
 			"type": "image/png",
 			"sizes": "192x192",
 			"purpose": "maskable"
 		},
 		{
-			"src": "/seasons/icon-512.png",
+			"src": "https://ufrutov.github.io/seasons/icon-512.png",
 			"type": "image/png",
 			"sizes": "512x512",
 			"purpose": "maskable"
 		}
 	],
-	"start_url": "/seasons/",
+	"start_url": "https://ufrutov.github.io/seasons/",
 	"background_color": "#40444b",
 	"display": "standalone", // "fullscreen"
 	"orientation": "landscape",
-	"scope": "/seasons/",
+	"scope": "https://ufrutov.github.io/seasons/",
 	"theme_color": "#40444b"
 }
