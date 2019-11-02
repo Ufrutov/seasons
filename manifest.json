@@ -17,7 +17,7 @@
 	],
 	"start_url": "https://ufrutov.github.io/seasons/",
 	"background_color": "#40444b",
-	"display": "standalone", // "fullscreen"
+	"display": "standalone",
 	"orientation": "landscape",
 	"scope": "https://ufrutov.github.io/seasons/",
 	"theme_color": "#40444b"
