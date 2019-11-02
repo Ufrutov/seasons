@@ -3,13 +3,19 @@
 	"name": "Seasons",
 	"icons": [
 		{
-			"src": "https://ufrutov.github.io/seasons/icon-192.png",
+			"src": "https://ufrutov.github.io/seasons/assets/icons/pwa/icon-144.png",
+			"type": "image/png",
+			"sizes": "144x144",
+			"purpose": "maskable"
+		},
+		{
+			"src": "https://ufrutov.github.io/seasons/assets/icons/pwa/icon-192.png",
 			"type": "image/png",
 			"sizes": "192x192",
 			"purpose": "maskable"
 		},
 		{
-			"src": "https://ufrutov.github.io/seasons/icon-512.png",
+			"src": "https://ufrutov.github.io/seasons/assets/icons/pwa/icon-512.png",
 			"type": "image/png",
 			"sizes": "512x512",
 			"purpose": "maskable"
