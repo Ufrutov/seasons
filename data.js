@@ -2555,6 +2555,18 @@ const data = [
 		"epizode": 4,
 		"src": "http://data05-cdn.datalock.ru/fi2lm/bcdbaacf538d493072ef2a0f6a835c6c/7f_Bobs.Burgers.S10E04.720p.TVShows.a1.24.10.19.mp4"
 	}, {
+		"id": "s2",
+		"name": "Бургеры Боба",
+		"season": 10,
+		"epizode": 5,
+		"src": "http://temp-cdn.datalock.ru/fi2lm/6f0950574c8a95a9857185a98b8eca3c/7f_Bobs.Burgers.S10E05.1080p.TVShows.a1.13.11.19.mp4"
+	}, {
+		"id": "s2",
+		"name": "Бургеры Боба",
+		"season": 10,
+		"epizode": 6,
+		"src": "http://temp-cdn.datalock.ru/fi2lm/6f0950574c8a95a9857185a98b8eca3c/7f_Bobs.Burgers.S10E06.1080p.TVShows.a1.13.11.19.mp4"
+	}, {
 		"id": "s3",
 		"name": "Reno 911",
 		"season": 1,
