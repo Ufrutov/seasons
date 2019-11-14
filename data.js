@@ -5860,5 +5860,89 @@ const data = [
 		"season": 1,
 		"epizode": 10,
 		"src": "http://data11-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_The.Young.Pope.s01e10.HDTVRip.XviD.Rus.Eng.BaibaKo.tv.a1.27.11.16.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 1,
+		"src": "http://data02-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_War.Of.The.Worlds.s01e01.HDTV720p.Rus.Fre.BaibaKo.tv.a1.30.10.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 2,
+		"src": "http://data03-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e02.720.Baibako.a1.31.10.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 3,
+		"src": "http://data05-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e03.720.Baibako.a1.31.10.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 4,
+		"src": "http://data03-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e04.720.Baibako.a1.31.10.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 5,
+		"src": "http://data12-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e05.720.Baibako.a1.31.10.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 6,
+		"src": "http://data09-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e06.720.Baibako.a1.02.11.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 7,
+		"src": "http://data11-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e07.720.Baibako.a1.02.11.19.mp4"
+	}, {
+		"id": "s10",
+		"name": "War of the Worlds",
+		"season": 1,
+		"epizode": 8,
+		"src": "http://data02-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_war.of.the.worlds.2019.s01e08.720.Baibako.a1.02.11.19.mp4"
+	}, 	{
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 1,
+		"src": "http://data02-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E01.WEBRip.GoodPeople.a1.11.07.19.mp4"
+	}, {
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 2,
+		"src": "http://data09-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E02.WEBRip.GoodPeople.a1.11.07.19.mp4"
+	}, {
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 3,
+		"src": "http://data05-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E03.WEBRip.GoodPeople.a1.11.07.19.mp4"
+	}, {
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 4,
+		"src": "http://data11-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E04.WEBRip.Rus.Eng.GoodPeople.a1.13.07.19.mp4"
+	}, {
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 5,
+		"src": "http://data03-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E05.WEBRip.GoodPeople.a1.11.07.19.mp4"
+	}, {
+		"id": "s11",
+		"name": "Magnus",
+		"season": 1,
+		"epizode": 6,
+		"src": "http://data09-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E06.WEBRip.GoodPeople.a1.11.07.19.mp4"
 	}
 ]
