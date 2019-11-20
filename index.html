@@ -161,6 +161,8 @@
 				margin-right: 8px;
 				margin-bottom: 8px;
 				cursor: pointer; }
+			.epizode.temp {
+				background-color: var(--color-playing); }
 			.epizode.active {
 				background-color: var(--color-secondary);
 				color: var(--color-background); }
@@ -348,6 +350,10 @@
 					let sEl = document.createElement('div');
 					sEl.className = 'epizode shadow-sm';
 					sEl.innerHTML = s.epizode;
+
+					if( s.src.indexOf('temp') !== -1 ) {
+						sEl.className += ' temp';
+					}
 
 					if( saved && saved.id === s.id && saved.season === s.season && saved.epizode === s.epizode ) {
 						sEl.className += ' active';
