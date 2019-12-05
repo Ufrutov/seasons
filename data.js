@@ -5944,5 +5944,41 @@ const data = [
 		"season": 1,
 		"epizode": 6,
 		"src": "http://data09-cdn.datalock.ru/fi2lm/664c26bb826ac8ef151dfb79d7c3a30c/7f_Magnus.S01E06.WEBRip.GoodPeople.a1.11.07.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 1,
+		"src": "http://data01-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e01..Immigrant.a1.06.09.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 2,
+		"src": "http://data04-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e02..Chto.novogo,.Buenos-Ayres.a1.06.09.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 3,
+		"src": "http://data01-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e03..Odin.v.Damaske.a1.06.09.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 4,
+		"src": "http://data11-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e04..Strannye.pary.a1.06.09.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 5,
+		"src": "http://data01-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e05..Ryba.dolzhna.plavat.a1.06.09.19.mp4"
+	}, {
+		"id": "s12",
+		"name": "The Spy",
+		"season": 1,
+		"epizode": 6,
+		"src": "http://data03-cdn.datalock.ru/fi2lm/863205a74b8bbbf57b4b4affe22b1277/7f_The.Spy.s01e06..Domoy.a1.09.09.19.mp4"
 	}
 ]
