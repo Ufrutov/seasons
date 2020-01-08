@@ -6021,7 +6021,7 @@ const data = [
 		"name": "BoJack Horseman",
 		"season": 1,
 		"epizode": 1,
-		"src": "http://data04-cdn.datalock.ru/fi2lm/6fb6531…/7f_Bojack.Horseman.s01e01.WEB.720p.NewStudio.TV.a1.25.07.16.mp4"
+		"src": "http://data06-cdn.datalock.ru/fi2lm/6fb65319d08ae46fa87ea0c9bfb1b3ba/7f_Bojack.Horseman.s01e12.WEB.720p.NewStudio.TV.a1.25.07.16.mp4"
 	}, {
 		"id": "s14",
 		"name": "BoJack Horseman",
