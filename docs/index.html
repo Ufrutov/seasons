@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<link rel="shortcut icon" href="assets/icons/favicon.png" />
+
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'/>
+		<meta http-equiv="Cache-Control" content="no-store" />
+
+		<title>Watch your series</title>
+
+		<meta name="theme-color" content="#40444B">
+		<meta name="background-color" content="#40444B">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+
+		<link rel="manifest" href="manifest.json">
+
+		<style type="text/css">
+			:root {
+				--color-primary: #7289da;
+				--color-primary-2: #5976dc;
+				--color-secondary: #fbc976;
+				--color-secondary-2: #efb14a;
+				--color-background: #2f3136;
+				--color-text: #c7c7c7;
+				--color-playing: #dc0909;
+
+				--player-height: 64px;
+			}
+			#playlist::-webkit-scrollbar {
+				width: 5px; }
+			#playlist::-webkit-scrollbar-track {
+				background-color: #212429; }
+			#playlist::-webkit-scrollbar-thumb {
+				background-color: #47516a; }
+			video { outline: none; }
+			html, body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				color: var(--color-text);
+				line-height: 1; }
+			main {
+				height: inherit; }
+			aside {
+				width: 220px;
+				position: relative;
+				background-color: var(--color-background); }
+			section {
+				background-color: #000000; }
+			#video {
+				position: relative;
+				height: 100%;
+				width: 100%; }
+			#play {
+				width: 48px;
+				height: 48px;
+				background-color: var(--color-primary);
+				cursor: pointer;
+				border-radius: 16px;
+				z-index: 2; }
+			#play:hover,
+			#play:active {
+				background-color: var(--color-primary-2); }
+			.ready::before,
+			.play::before,
+			.next::before {
+				content: '';
+				display: block;
+				margin-top: 14px;
+				margin-left: 14px;
+				width: 20px;
+				height: 20px;
+				background-size: cover;
+				background-position: center; }
+			.ready::before {
+				margin-left: 16px;
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDM1NyAzNTciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDM1NyAzNTc7IiB4bWw6c3BhY2U9InByZXNlcnZlIiBjbGFzcz0iaG92ZXJlZC1wYXRocyI+PGc+PGc+Cgk8ZyBpZD0icGxheS1hcnJvdyI+CgkJPHBvbHlnb24gcG9pbnRzPSIzOC4yNSwwIDM4LjI1LDM1NyAzMTguNzUsMTc4LjUgICAiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiMwMDAwMDAiPjwvcG9seWdvbj4KCTwvZz4KPC9nPjwvZz4gPC9zdmc+); }
+			.play::before {
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDM1My41NjIgMzUzLjU2MiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzUzLjU2MiAzNTMuNTYyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PGc+Cgk8Zz4KCQk8Zz4KCQkJPHBhdGggZD0iTTQxLjA2NCwzNTMuNTYyaDEwOS4wMTRWMEg0MS4wNjRWMzUzLjU2MnoiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiMwMDAwMDAiPjwvcGF0aD4KCQk8L2c+CgkJPGc+CgkJCTxwYXRoIGQ9Ik0yMDMuNDgyLDB2MzUzLjU2MmgxMDkuMDE3VjBIMjAzLjQ4MnoiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIGNsYXNzPSJhY3RpdmUtcGF0aCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZGF0YS1vbGRfY29sb3I9IiMwMDAwMDAiPjwvcGF0aD4KCQk8L2c+Cgk8L2c+CjwvZz48L2c+IDwvc3ZnPg==); }
+			.next::before {
+				margin-left: 44px;
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMwNiAzMDYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMwNiAzMDY7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz48Zz4KCTxnIGlkPSJjaGV2cm9uLXJpZ2h0Ij4KCQk8cG9seWdvbiBwb2ludHM9Ijk0LjM1LDAgNTguNjUsMzUuNyAxNzUuOTUsMTUzIDU4LjY1LDI3MC4zIDk0LjM1LDMwNiAyNDcuMzUsMTUzICAgIiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBjbGFzcz0iYWN0aXZlLXBhdGgiIHN0eWxlPSJmaWxsOiNGRkZGRkYiIGRhdGEtb2xkX2NvbG9yPSIjMDAwMDAwIj48L3BvbHlnb24+Cgk8L2c+CjwvZz48L2c+IDwvc3ZnPg==); }
+			#next {
+				width: 68px;
+				height: 48px;
+				background-color: var(--color-secondary);
+				cursor: pointer;
+				border-radius: 16px;
+				margin-left: -40px;
+				z-index: 1; }
+			#next:hover,
+			#next:active {
+				background-color: var(--color-secondary-2); }
+			#playlist {
+				max-height: calc( 100% - var(--player-height) );
+				overflow-y: auto; }
+			#history {
+				display: none;
+				position: absolute;
+				overflow-y: auto;
+				height: calc( 100% - var(--player-height) );
+				width: 100%;
+				top: var(--player-height);
+				left: 0;
+				background-color: var(--color-background); }
+			#history.active {
+				display: block; }
+			#tip {
+				position: fixed;
+				bottom: 20px;
+				padding: 10px 15px;
+				border-radius: 5px;
+				border: none;
+				text-align: center;
+				color: var(--color-text);
+				cursor: default;
+				background-color: var(--color-background); }
+			.player {
+				overflow: hidden;
+				background-color: #40444b; }
+			.player--caption {
+				cursor: pointer; }
+			.tvs .season {
+				display: none; }
+			.tvs.active .season {
+				display: block; }
+			.tvs.playing .tvs--name:after,
+			.season.playing .season--name:after {
+				content: '';
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 4px;
+				margin-left: 5px;
+				background-color: var(--color-playing); }
+			.tvs--head {
+				background-color: #21242b;
+				cursor: pointer;
+				border-top: 1px solid var(--color-background); }
+			.tvs--name {
+				font-weight: bold;
+				color: var(--color-primary); }
+			.tvs--head .small {
+				font-weight: normal;
+				color: var(--color-text); }
+			.tvs.active .tvs--name {
+				color: var(--color-secondary); }
+			.epizode {
+				width: 32px;
+				height: 32px;
+				font-size: 16px;
+				line-height: 33px;
+				letter-spacing: -.1rem;
+				font-weight: bold;
+				text-align: center;
+				background-color: var(--color-primary);
+				border-radius: 5px;
+				margin-right: 8px;
+				margin-bottom: 8px;
+				cursor: pointer; }
+			.epizode.temp {
+				background-color: var(--color-playing); }
+			.epizode.active {
+				background-color: var(--color-secondary);
+				color: var(--color-background); }
+			.season {
+				cursor: pointer;
+				background-color: #21242b;
+				border-radius: 5px; }
+			.season .season--series {
+				display: none !important; }
+			.season.active .season--series {
+				display: flex !important; }
+			.season--series {
+				width: 200px; }
+			.season.active .season--name {
+				font-weight: bold;
+				margin-bottom: .25rem; }
+			.progress--bar {
+				height: 4px;
+				font-size: 0;
+				max-width: 120px;
+				background-color: var(--color-background); }
+			#progress {
+				display: inline-block;
+				height: inherit;
+				background-color: var(--color-primary); }
+		</style>
+</head>
+
+<body>
+	<main class="d-flex align-items-stretch">
+		<aside>
+			<div class="player d-flex align-items-center p-2">
+				<div class="player--actions d-flex pr-2">
+					<div id="play" class="ready"></div>
+					<div id="next" class="next"></div>
+				</div>
+				<div id="info" class="player--caption flex-grow-1">
+					<div id="title" class="text-truncate font-weight-bolder mb-1">Смотреть бесплатно</div>
+					<div id="caption" class="text-truncate small mb-1">Бесплатно, без регистрации</div>
+					<div class="progress--bar"><div id="progress"></div></div>
+				</div>
+			</div>
+			<div id="playlist"></div>
+			<div id="history"></div>
+		</aside>
+		<section class="flex-grow-1">
+			<video id="video" controls autoplay="false"></video>
+		</section>
+		<div>
+	</main>
+	<dialog id="tip"></dialog>
+</body>
+
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript">
+	let items = [];
+	let playing = null;
+	let tipTimeout = null;
+
+	(function() {
+		const playlist = document.getElementById('playlist');
+		const title = document.getElementById('title');
+		const caption = document.getElementById('caption');
+		const info = document.getElementById('info');
+		const video = document.getElementById('video');
+		const play = document.getElementById('play');
+		const next = document.getElementById('next');
+		const history = document.getElementById('history');
+		const tip = document.getElementById('tip');
+
+		data.forEach((s, i) => {
+			if( items.findIndex(x => x.id === s.id ) === -1 ) {
+				items.push({
+					id: s.id,
+					title: s.name,
+					seasons: []
+				});
+			}
+
+			if( items.findIndex(x => x.id === s.id ) !== -1 ) {
+				const index = items.findIndex(x => x.id === s.id );
+				let tvs = items[index];
+
+				if( tvs.seasons.findIndex(x => x.season === s.season) === -1 ) {
+					tvs.seasons.push({
+						id: s.id,
+						season: s.season,
+						series: []
+					});
+				}
+
+				if( tvs.seasons.findIndex(x => x.season === s.season) !== -1 ) {
+					const sIndex = tvs.seasons.findIndex(x => x.season === s.season);
+					let season = tvs.seasons[sIndex];
+
+					season.series.push(s);
+				}
+			}
+		});
+
+		completePlaylist(items);
+
+		play.addEventListener('click', e => {
+			clickListener(e, 'play', null, e.currentTarget)
+		});
+		next.addEventListener('click', e => {
+			clickListener(e, 'next', null, e.currentTarget)
+		});
+		info.addEventListener('click', e => {
+			clickListener(e, 'toggleHistory', null, e.currentTarget)
+		});
+		document.addEventListener('keydown', e => {
+			clickListener(e, 'keydown', e.code)
+		});
+
+		if( video ) {
+			video.addEventListener('play', e => {
+				play.classList.add('play');
+				play.classList.remove('ready');
+			});
+
+			video.addEventListener('pause', e => {
+				play.classList.add('ready');
+				play.classList.remove('play');
+			});
+
+			video.addEventListener('ended', e => {
+				toogleFullScreen(false);
+			});
+
+			video.addEventListener('timeupdate', e => {
+				updateProgress();
+			});
+		}
+	})();
+
+	function completePlaylist(data) {
+		const saved = getCookie('epizode');
+
+		data.forEach((i, itvs) => {
+			let tvs = document.createElement('div');
+			tvs.className = 'tvs';
+
+			if( saved && saved.id === i.id ) {
+				tvs.className += ' active';
+			}
+
+			tvs.onclick = (e) => { clickListener(e, 'tvs', i, tvs) }
+
+			let tvsHead = document.createElement('div');
+			tvsHead.className = 'tvs--head p-2';
+
+			let tvsName = document.createElement('div');
+			tvsName.className = 'tvs--name';
+			tvsName.innerHTML = i.title;
+
+			let tvsCount = document.createElement('div');
+			tvsCount.className = 'tvs--count mt-1 small';
+			tvsCount.innerHTML = i.seasons.length + ' сезонов';
+
+			tvsHead.appendChild(tvsName);
+			tvsHead.appendChild(tvsCount);
+			tvs.appendChild(tvsHead);
+
+			i.seasons.forEach((sn, isn) => {
+				let season = document.createElement('div');
+				season.className = 'season m-1 py-2 pl-2';
+
+				if( saved && saved.id === sn.id && saved.season === sn.season ) {
+					season.className += ' active';
+				}
+
+				season.onclick = (e) => { clickListener(e, 'season', sn, season) }
+
+				let seasonName = document.createElement('div');
+				seasonName.className = 'season--name small';
+				seasonName.innerHTML = sn.season + ' сезон ('+ sn.series.length +' серий)';
+
+				season.appendChild(seasonName);
+
+				let series = document.createElement('div');
+				series.className = 'season--series d-flex flex-wrap pt-2 mb-n2';
+
+				sn.series.forEach((s, is) => {
+					let sEl = document.createElement('div');
+					sEl.className = 'epizode shadow-sm';
+					sEl.innerHTML = s.epizode;
+
+					if( s.src.indexOf('temp') !== -1 ) {
+						sEl.className += ' temp';
+					}
+
+					if( saved && saved.id === s.id && saved.season === s.season && saved.epizode === s.epizode ) {
+						sEl.className += ' active';
+					}
+
+					s['index'] = itvs + ':' + isn + ':' + is;
+
+					sEl.onclick = (e) => { clickListener(e, 'epizode', s, sEl) }
+
+					series.appendChild(sEl);
+				});
+
+				season.appendChild(series);
+				tvs.appendChild(season);
+			});
+
+
+			playlist.appendChild(tvs);
+		});
+
+		if( saved ) {
+			playEpizode(saved, false);
+		}
+	}
+
+	function clickListener(e, type, data, el) {
+		e.stopPropagation();
+
+		switch( type ) {
+			case 'tvs':
+				if( el.classList.contains('active') ) {
+					el.classList.remove('active');
+				} else {
+					Array.from(document.querySelectorAll('.tvs')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+				}
+				break;
+			case 'season':
+				if( el.classList.contains('active') ) {
+					el.classList.remove('active');
+				} else {
+					Array.from(document.querySelectorAll('.season')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+				}
+				break;
+			case 'epizode':
+				if( !el.classList.contains('active') ) {
+					Array.from(document.querySelectorAll('.epizode')).forEach(el => { el.classList.remove('active') });
+					el.classList.add('active');
+
+					playEpizode(data, true);
+				}
+				break;
+			case 'play':
+				if( video.paused ) {
+					video.play();
+				} else {
+					video.pause();
+				}
+				break;
+			case 'next':
+				updateProgress(0);
+
+				if( playing ) {
+					const tvs = parseInt(playing.index.split(':')[0]);
+					const sn = parseInt(playing.index.split(':')[1]);
+					const epizode = parseInt(playing.index.split(':')[2]);
+					let nextIndex = false;
+
+					if( items[tvs].seasons[sn].series.length-1 > epizode ) {
+						nextIndex = `${tvs}:${sn}:${epizode+1}`;
+					} else {
+						if( items[tvs].seasons.length-1 > sn ) {
+							nextIndex = `${tvs}:${sn+1}:0`;
+						} else {
+							if( items.length-1 > tvs ) {
+								nextIndex = `${tvs+1}:0:0`;
+							} else {
+								nextIndex = '0:0:0';
+							}
+						}
+					}
+
+					if( nextIndex ) {
+						const i = nextIndex.split(':');
+						const next = items[i[0]].seasons[i[1]].series[i[2]];
+
+						if( next ) {
+							Array.from(document.getElementsByClassName('tvs active')).forEach(el => { el.classList.remove('active') });
+							Array.from(document.getElementsByClassName('season active')).forEach(el => { el.classList.remove('active') });
+							Array.from(document.getElementsByClassName('epizode active')).forEach(el => { el.classList.remove('active') });
+
+							const tvs = document.getElementsByClassName('tvs')[i[0]];
+							tvs.classList.add('active');
+							tvs.getElementsByClassName('season')[i[1]].classList.add('active');
+							tvs.getElementsByClassName('season')[i[1]].getElementsByClassName('epizode')[i[2]].classList.add('active');
+
+							playEpizode(next, true);
+						}
+					}
+				}
+				break;
+			case 'toggleHistory':
+				toggleHistoryList();
+				break;
+			case 'playFromHistory':
+				playEpizode(data, true);
+				toggleHistoryList(true);
+				break;
+			case 'keydown':
+				switch(data) {
+					case 'Space':
+						togglePlay();
+						break;
+					case 'ArrowUp':
+					case 'NumpadAdd':
+						changeVideoVolume(true);
+						break;
+					case 'ArrowDown':
+					case 'NumpadSubtract':
+						changeVideoVolume(false);
+						break;
+					case 'KeyF':
+						toogleFullScreen();
+						break;
+					default:
+						console.log('[keydown] code:', data);
+				}
+				break;
+		}
+	}
+
+	function playEpizode(data, play) {
+		playing = data;
+		setCookie('epizode', data);
+
+		markPlaying(data);
+
+		title.innerHTML = data.name;
+		caption.innerHTML = `${data.season} сезон ${data.epizode} серия`;
+
+		showTip(title.innerHTML, caption.innerHTML, 2500);
+
+		document.title = `${title.innerHTML} (${caption.innerHTML})`;
+
+		if( !video.paused ) {
+			video.pause();
+		}
+
+		video.src = data.src;
+
+		if( play ) {
+			video.play();
+			saveHistory(data);
+		}
+	}
+
+	function togglePlay() {
+		if( !video.paused ) {
+			video.pause();
+		} else {
+			video.play();
+		}
+	}
+
+	function changeVideoVolume(add) {
+		if( add ) {
+			if( video.volume < 1 ) {
+				video.volume += 0.1;
+			}
+		} else {
+			if ( video.volume > 0 ) {
+				video.volume -= 0.1;
+			}
+		}
+
+		video.volume = parseFloat(video.volume.toFixed(1));
+
+		showTip(`Volume ${parseInt(video.volume*100)}`, '', 1000);
+	}
+
+	function toogleFullScreen(show) {
+		const fullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+		if( fullScreen && !show ) {
+			try {
+				document.exitFullscreen();
+			} catch(e) { console.error(e); }
+		} else {
+			video.requestFullscreen();
+		}
+	}
+
+	function markPlaying(data) {
+		Array.from(document.getElementsByClassName('tvs playing')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.getElementsByClassName('tvs active')).forEach(el => { el.classList.remove('active') });
+		Array.from(document.getElementsByClassName('season playing')).forEach(el => { el.classList.remove('playing') });
+		Array.from(document.getElementsByClassName('season active')).forEach(el => { el.classList.remove('active') });
+		Array.from(document.getElementsByClassName('epizode active')).forEach(el => { el.classList.remove('active') });
+
+		const index = data.index.split(':');
+		const tvs = document.querySelectorAll('.tvs')[index[0]];
+		const season = tvs.querySelectorAll('.season')[index[1]];
+		const epizode = season.querySelectorAll('.epizode')[index[2]];
+
+		tvs.classList.add('playing');
+		tvs.classList.add('active');
+		season.classList.add('playing');
+		season.classList.add('active');
+		epizode.classList.add('active');
+	}
+
+	function updateProgress(value) {
+		const progress = document.getElementById('progress');
+
+		if( typeof value !== 'undefined' ) {
+			progress.style.width = `${value}%`;
+		} else {
+			const ts = video.currentTime;
+			const duration = video.duration;
+
+			if( typeof duration === 'number' ) {
+				const width = ( 100 * ts ) / duration;
+				progress.style.width = `${width}%`;
+			}
+		}
+	}
+
+	function showTip(title = '', text = '', delay = 2000) {
+		if( tip.open ) {
+			tip.innerHTML = '';
+		}
+
+		if( title.length > 0 ) {
+			const titleEl = document.createElement('div');
+			titleEl.innerHTML = title;
+			titleEl.className = 'tvs--name';
+
+			tip.appendChild(titleEl);
+		}
+
+		if( text.length > 0 ) {
+			const textEl = document.createElement('div');
+			textEl.innerHTML = text;
+			textEl.className = 'small mt-1';
+
+			tip.appendChild(textEl);
+		}
+
+		if( !tip.open ) {
+			tip.show();
+		}
+
+		if( typeof tipTimeout === 'number' ) {
+			try {
+				window.clearTimeout(tipTimeout);
+			} catch(e) {
+				console.error(e);
+			}
+			tipTimeout = null;
+		}
+
+		tipTimeout = window.setTimeout(closeTip, delay);
+	}
+
+	function closeTip() {
+		tip.innerHTML = '';
+
+		if( typeof tipTimeout === 'number' ) {
+			try {
+				window.clearTimeout(tipTimeout);
+			} catch(e) {
+				console.error(e);
+			}
+			tipTimeout = null;
+		}
+
+		if( tip.open ) {
+			tip.close();
+		}
+	}
+
+	function toggleHistoryList(hide = false) {
+		const history = document.getElementById('history');
+
+		if( history.classList.contains('active') || hide ) {
+			history.classList.remove('active');
+			history.innerHTML = '';
+		} else {
+			getHistory(data => {
+				data.forEach(h => {
+					let epizode = document.createElement('div');
+					epizode.className = 'season m-1 py-2 pl-2';
+
+					epizode.onclick = (e) => { clickListener(e, 'playFromHistory', h) }
+
+					let seasonName = document.createElement('div');
+					seasonName.className = 'tvs--name mt-n1';
+					seasonName.innerHTML = h.name;
+
+					let description = document.createElement('div');
+					description.className = 'tvs--count mt-1 small';
+					description.innerHTML = `${h.season} сезон ${h.epizode} серия`;
+
+					epizode.appendChild(seasonName);
+					epizode.appendChild(description);
+
+					history.appendChild(epizode);
+				});
+				history.classList.add('active');
+			});
+		}
+	}
+
+	function getHistory(callback) {
+		const history = getCookie('history');
+		if( history ) {
+			if( typeof callback === 'function' ) {
+				callback(history);
+			} else {
+				return history;
+			}
+		}
+	}
+
+	function saveHistory(epizode) {
+		let history = getCookie('history');
+
+		if( history === false ) {
+			history = [];
+		}
+
+		if( history.length > 99 ) {
+			history.pop();
+		}
+
+		history.unshift(epizode);
+
+		setCookie('history', history);
+	}
+
+	function getCookie(name) {
+		try {
+			const cookieData = window.localStorage.getItem(name);
+			if( cookieData !== null ) {
+				return JSON.parse(cookieData);
+			} else {
+				return false;
+			}
+		} catch(e) {
+			console.error('[E][setCookie] Error on localStorage.getItem: '+e.name+' : '+e.message);
+		}
+	}
+
+	function setCookie(field, data) {
+		try {
+			window.localStorage.setItem(field, JSON.stringify(data));
+		} catch(e) {
+			console.error('[E][setCookie] Error on localStorage.setItem: '+e.name+' : '+e.message);
+		}
+	}
+</script>
+
+</html>
