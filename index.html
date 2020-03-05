@@ -317,7 +317,12 @@
 	})();
 
 	function completePlaylist(data) {
-		const saved = getCookie('epizode');
+		let saved = getCookie('epizode');
+		const URLEpisode = parseURL();
+
+		if( URLEpisode ) {
+			saved = URLEpisode;
+		}
 
 		data.forEach((i, itvs) => {
 			let tvs = document.createElement('div');
@@ -506,6 +511,7 @@
 	function playEpizode(data, play) {
 		playing = data;
 		setCookie('epizode', data);
+		setURL(data);
 
 		markPlaying(data);
 
@@ -730,6 +736,22 @@
 		} catch(e) {
 			console.error('[E][setCookie] Error on localStorage.setItem: '+e.name+' : '+e.message);
 		}
+	}
+
+	function setURL(data) {
+		const URLParameters = Object.entries(data).map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`).join("&");
+		history.pushState({}, null, `?${URLParameters}`);
+	}
+
+	function parseURL() {
+		let data = {};
+		const URL = new URLSearchParams(window.location.search);
+
+		for ( const [key, value] of URL.entries() ) {
+			data[key] = value;
+		}
+
+		return data;
 	}
 </script>
 
