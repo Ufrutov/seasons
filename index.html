@@ -29,11 +29,11 @@
 
 				--player-height: 64px;
 			}
-			#playlist::-webkit-scrollbar {
+			.x-scroll::-webkit-scrollbar {
 				width: 5px; }
-			#playlist::-webkit-scrollbar-track {
+			.x-scroll::-webkit-scrollbar-track {
 				background-color: #212429; }
-			#playlist::-webkit-scrollbar-thumb {
+			.x-scroll::-webkit-scrollbar-thumb {
 				background-color: #47516a; }
 			video { outline: none; }
 			html, body {
@@ -45,10 +45,12 @@
 			main {
 				height: inherit; }
 			aside {
-				width: 220px;
 				position: relative;
-				background-color: var(--color-background); }
+				background-color: var(--color-background);
+				overflow-y: hidden;
+				flex: 3; }
 			section {
+				flex: 2;
 				background-color: #000000; }
 			#video {
 				position: relative;
@@ -175,24 +177,40 @@
 			.season.active .season--series {
 				display: flex !important; }
 			.season--series {
-				width: 200px; }
+				width: auto; }
 			.season.active .season--name {
 				font-weight: bold;
 				margin-bottom: .25rem; }
 			.progress--bar {
 				height: 4px;
 				font-size: 0;
-				max-width: 120px;
+
 				background-color: var(--color-background); }
 			#progress {
 				display: inline-block;
 				height: inherit;
 				background-color: var(--color-primary); }
+			.x-flex {
+				display: flex;
+				flex-direction: column-reverse; }
+			@media only screen and (min-width: 600px) {
+				.x-flex {
+					flex-direction: row; }
+				aside {
+					flex: none;
+					width: 220px; }
+				section {
+					flex-grow: 1; }
+				.season--series {
+					width: 200px; }
+				.progress--bar {
+					max-width: 120px; }
+			}
 		</style>
 </head>
 
 <body>
-	<main class="d-flex align-items-stretch">
+	<main class="x-flex">
 		<aside>
 			<div class="player d-flex align-items-center p-2">
 				<div class="player--actions d-flex pr-2">
@@ -205,13 +223,12 @@
 					<div class="progress--bar"><div id="progress"></div></div>
 				</div>
 			</div>
-			<div id="playlist"></div>
-			<div id="history"></div>
+			<div id="playlist" class="x-scroll"></div>
+			<div id="history" class="x-scroll"></div>
 		</aside>
-		<section class="flex-grow-1">
+		<section>
 			<video id="video" controls autoplay="false"></video>
 		</section>
-		<div>
 	</main>
 	<dialog id="tip"></dialog>
 </body>
