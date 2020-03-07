@@ -34,7 +34,7 @@ listEl.forEach((el, i) => {
 #### Python Selenium data collect
 
 ```
-$ python selenium.py
+$ python index.py
 ```
 
 Python script collects all available episodes and store them at the `data.js` file
