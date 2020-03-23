@@ -4,7 +4,7 @@ import json
 import time
 import datetime
 
-with open('./data-seasons.json') as f:
+with open('./data-seasons.json', encoding="utf8") as f:
 	data = json.load(f)
 
 chrome_options = webdriver.ChromeOptions()
@@ -27,8 +27,22 @@ def main(set):
 	for s in set:
 		driver.get(s['src'])
 
-		ls = driver.find_element_by_class_name('pgs-seaslist')
-		lsa = ls.find_elements_by_tag_name('a')
+		try:
+			ls = driver.find_element_by_class_name('pgs-seaslist')
+		except NoSuchElementException as e:
+			print('[ERROR:QUIT] NoSuchElementException - .pgs-seaslist')
+		finally:
+			driver.quit()
+			quit()
+
+		try:
+			lsa = ls.find_elements_by_tag_name('a')
+		except NoSuchElementException as e:
+			print('[ERROR:QUIT] NoSuchElementException - .pgs-seaslist > a')
+		finally:
+			driver.quit()
+			quit()
+
 		LS = []
 
 		for listItem in lsa:
