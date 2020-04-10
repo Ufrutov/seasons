@@ -401,6 +401,12 @@
 
 		if( saved ) {
 			playEpizode(saved, false);
+		} else {
+			if( items.length > 0 ) {
+				playEpizode(items[0].seasons[0].series[0], false);
+			} else {
+				showTip('Error', 'No epizodes for watching', 4000);
+			}
 		}
 	}
 
@@ -521,7 +527,7 @@
 		title.innerHTML = data.name;
 		caption.innerHTML = `${data.season} сезон ${data.epizode} серия`;
 
-		showTip(title.innerHTML, caption.innerHTML, 2500);
+		showTip(title.innerHTML, caption.innerHTML, 4000);
 
 		document.title = `${title.innerHTML} (${caption.innerHTML})`;
 
@@ -533,8 +539,9 @@
 
 		if( play ) {
 			video.play();
-			saveHistory(data);
 		}
+
+		saveHistory(data);
 	}
 
 	function togglePlay() {
@@ -754,7 +761,11 @@
 			data[key] = value;
 		}
 
-		return data;
+		if( data.hasOwnProperty('src') ) {
+			return data;
+		} else {
+			return false;
+		}
 	}
 </script>
 
