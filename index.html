@@ -439,11 +439,7 @@
 				}
 				break;
 			case 'play':
-				if( video.paused ) {
-					video.play();
-				} else {
-					video.pause();
-				}
+				togglePlay();
 				break;
 			case 'next':
 				updateProgress(0);
@@ -497,7 +493,9 @@
 			case 'keydown':
 				switch(data) {
 					case 'Space':
-						togglePlay();
+						if( document.activeElement.id !== 'video' ) {
+							togglePlay();
+						}
 						break;
 					case 'ArrowUp':
 					case 'NumpadAdd':
